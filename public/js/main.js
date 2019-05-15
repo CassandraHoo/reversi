@@ -1,4 +1,4 @@
-/* funtions for general use */
+/* functions for general use */
 
 /* This function returns the value associated with 'whichParam' on URL */
 function getURLParameters(whichParam)
@@ -8,14 +8,14 @@ function getURLParameters(whichParam)
   for (var i = 0; i < pageURLVariables.length; i++){
     var parameterName = pageURLVariables[i].split('=');
     if(parameterName[0] == whichParam){
-      return parameterName [1];
+      return parameterName[1];
     }
   }
 }
 
 var username = getURLParameters('username');
 if('undefined' == typeof username || !username){
-  username = 'anonymous_'+Math.random();
+  username = 'anonymous_' +Math.random();
 }
 
 $('#messages').append('<h4>'+username+'</h4>');
