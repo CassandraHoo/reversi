@@ -29,6 +29,7 @@ socket.on('log',function(array){
 });
 
 socket.on('join_room_response',function(payload){
+  console.log("here");
   if(payload.result == 'fail'){
     alert(payload.message);
     return;
@@ -37,6 +38,7 @@ socket.on('join_room_response',function(payload){
 });
 
 socket.on('send_message_response',function(payload){
+  console.log("here");
   if(payload.result == 'fail'){
     alert(payload.message);
     return;
