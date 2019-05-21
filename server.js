@@ -126,7 +126,7 @@ io.sockets.on('connection', function (socket) {
                                   membership: (numClients + 1)
                                 };
           io.sockets.in(room).emit('join_room_response',success_data);
-          log('Room' + room + ' was just joined by '+ username);
+          log('Room ' + room + ' was just joined by '+ username);
           });
 
       /* send_message command */
@@ -134,13 +134,13 @@ io.sockets.on('connection', function (socket) {
           {
             'room': room to join,
             'username': username of the person sending the message,
-            'message': the message to send
+            'message' : the message to send
           }
-            send_message_response;
-            {
-              'result': 'success',
-              'username' : username of person sending message,
-              'message': the message to send
+          send_message_response;
+          {
+            'result': 'success',
+            'username' : username of person that spoke,
+            'message': the message spoken
             }
             or
             {
@@ -195,10 +195,11 @@ io.sockets.on('connection', function (socket) {
 
                       var success_data = {
                             result: 'success',
+                            room: room,
                             username: username,
                             message: message
                           };
-                      io.sockets.in(room).emit('send_message_response', success_data);
+                      io.sockets.in(room).emit('send_message_response',success_data);
                       log('Message sent to room ' + room + 'by ' + username);
                   });
 
