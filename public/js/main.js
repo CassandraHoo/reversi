@@ -90,7 +90,7 @@ else{
 
 
 /* What do do when the server says that someone has left a room */
-socket.on('player-disconnected',function(payload){
+socket.on('player_disconnected',function(payload){
   if(payload.result == 'fail'){
     alert(payload.message);
     return;
