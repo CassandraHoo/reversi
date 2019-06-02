@@ -119,7 +119,7 @@ if(dom_elements.length != 0) {
   newNode.slideDown(1000);
 });
 
-
+/* Send an invite message to the server */
 function invite(who){
   var payload = {};
   payload.requested_user = who;
@@ -128,6 +128,7 @@ function invite(who){
   socket.emit('invite',payload);
 }
 
+/* Handle a response after sending an invite message to the server */
 socket.on('invite_response',function(payload){
   if(payload.result == 'fail'){
     alert(payload.message);
@@ -137,6 +138,7 @@ socket.on('invite_response',function(payload){
   $('.socket_'+payload.socket_id+' button').replaceWith(newNode);
 });
 
+/* Handle a notification that we have been invited */
 socket.on('invited',function(payload){
   if(payload.result == 'fail'){
     alert(payload.message);
