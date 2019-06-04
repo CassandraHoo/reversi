@@ -474,6 +474,7 @@ io.sockets.on('connection', function (socket) {
                   return;
                 }
 
+            /* Check to make sure that a person was specified to start a game with */
             var requested_user = payload.requested_user;
             if(('undefined' === typeof requested_user) || !requested_user){
                   var error_message = 'uninvite didn\'t specify a message, command aborted';
@@ -517,6 +518,139 @@ io.sockets.on('connection', function (socket) {
             socket.to(requested_user).emit('game_start_response', success_data);
 
             log('game_start successful');
+          });
+
+/* play_token command */
+      /* payload:
+          {
+            'row': 0-7 the row to play the token on
+            'column': 0-7 the column to play the token on
+            'color': 'white or black'
+          }
+
+          if successful a success message will be followed by a game_update message
+          play_token_response;
+          {
+            'result': 'success',
+            }
+            or
+            {
+              'result': 'fail',
+              'message' : failure message
+            }
+          */
+          socket.on('play_token',function(payload){
+            log('play_token with '+JSON.stringify(payload));
+
+            /* Check to make sure a payload was sent */
+            if(('undefined' === typeof payload) || !payload){
+                var error_message = 'play_token had no payload, command aborted';
+                log(error_message);
+                socket.emit('play_token_response',   {
+                                                        result: 'fail',
+                                                        message: error_message
+                                                      });
+                  return;
+            }
+
+            /* Check that the player has previously registered */
+            var player = players[socket.id];
+            if(('undefined' === typeof player) || !player){
+                var error_message = 'server doesn\'t recognize you (try going back one screen)';
+                log(error_message);
+                socket.emit('play_token_response',   {
+                                                          result: 'fail',
+                                                          message: error_message
+                                                        });
+                  return;
+            }
+
+            var username = players[socket.id];
+            if(('undefined' === typeof username) || !username){
+                var error_message = 'play_token can\'t identify who sent the message';
+                log(error_message);
+                socket.emit('play_token_response',   {
+                                                          result: 'fail',
+                                                          message: error_message
+                                                        });
+                  return;
+            }
+
+            var game_id = players[socket.id].room;
+            if(('undefined' === typeof game_id) || !game_id){
+                var error_message = 'play_token can\'t find your game board';
+                log(error_message);
+                socket.emit('play_token_response',   {
+                                                          result: 'fail',
+                                                          message: error_message
+                                                        });
+                  return;
+            }
+
+            var row = payload.row;
+            if(('undefined' === typeof row) || row < 0 || row > 7){
+                var error_message = 'play_token didn\'t specify a valid row, command aborted';
+                log(error_message);
+                socket.emit('play_token_response',   {
+                                                          result: 'fail',
+                                                          message: error_message
+                                                        });
+                  return;
+            }
+
+            var column = payload.column;
+            if(('undefined' === typeof column) || column < 0 || column > 7){
+                var error_message = 'play_token didn\'t specify a valid column, command aborted';
+                log(error_message);
+                socket.emit('play_token_response',   {
+                                                          result: 'fail',
+                                                          message: error_message
+                                                        });
+                  return;
+            }
+
+            var color = payload.color;
+            if(('undefined' === typeof color) || !color || (color != 'white' && color !='black')){
+                var error_message = 'play_token didn\'t specify a valid color, command aborted';
+                log(error_message);
+                socket.emit('play_token_response',   {
+                                                          result: 'fail',
+                                                          message: error_message
+                                                        });
+                  return;
+            }
+
+            var game = games[game_id];
+            if(('undefined' === typeof game) || !game){
+                var error_message = 'play_token couldn\'t find your game board';
+                log(error_message);
+                socket.emit('play_token_response',   {
+                                                          result: 'fail',
+                                                          message: error_message
+                                                        });
+                  return;
+            }
+
+            var success_data = {
+                              result: 'success',
+                              };
+            socket.emit('play_token_response', success_data);
+
+            /* Execute the move */
+            if (color == 'white'){
+              game.board[row][column] = 'w';
+              game.whose_turn = 'black';
+            }
+            else if (color == 'black'){
+              game.board[row][column] = 'b';
+              game.whose_turn = 'white';
+            }
+
+            var d = new Date();
+            game.last_move_time = d.getTime();
+
+            send_game_update(socket,game_id,'played a token');
+
           });
 
 });
@@ -565,7 +699,54 @@ function send_game_update(socket, game_id, message){
 
   /* Make sure that only 2 people are in the game room */
 
+  var roomObject;
+  var numClients;
+  do{
+    roomObject = io.sockets.adapter.rooms[game_id];
+    numClients = roomObject.length;
+    if(numClients > 2){
+      console.log('Too many clients in the room: '+game_id+' #: '+numClients);
+      if(games[game_id].player_white.socket == roomObject.sockets[0]){
+        games[game_id].player_white.socket = '';
+        games[game_id].player_white.username = '';
+      }
+      if(games[game_id].player_black.socket == roomObject.sockets[0]){
+        games[game_id].player_black.socket = '';
+        games[game_id].player_black.username = '';
+      }
+      /* Kick one of the extra peole out */
+      var sacrifice = Object.keys(roomObject.sockets)[0];
+      io.of('/').connected[sacrifice].leave(game_id);
+    }
+  }
+while((numClients-1) > 2);
+
   /* Assign this socket a color */
+  /* If the current player isn't assigned a color */
+  if ((games[game_id].player_white.socket != socket.id) && (games[game_id].player_black.socket != socket.id)){
+    console.log('Player isn\'t assigned a color: '+socket.id);
+    /* and there isn't a color to give them */
+    if((games[game_id].player_black.socket != '') && (games[game_id].player_white.socket != '')){
+      games[game_id].player_white.socket = '';
+      games[game_id].player_white.username = '';
+      games[game_id].player_black.socket = '';
+      games[game_id].player_black.username = '';
+    }
+  }
+  /* Assign colors to the players if not already done */
+  if(games[game_id].player_white.socket == ''){
+    if(games[game_id].player_black.socket != socket.id){
+      games[game_id].player_white.socket = socket.id;
+      games[game_id].player_white.username = players[socket.id].username;
+    }
+  }
+
+  if(games[game_id].player_black.socket == ''){
+    if(games[game_id].player_white.socket != socket.id){
+      games[game_id].player_black.socket = socket.id;
+      games[game_id].player_black.username = players[socket.id].username;
+    }
+  }
 
   /* Send game update */
   var success_data = {
