@@ -16,6 +16,10 @@ body {
   padding-top: 4 !important;
 }
 
+.pb-4 {
+  padding-bottom: 4 !important;
+}
+
 h1 {
   font-family: 'Marcellus SC', serif;
   font-size: 400%;
@@ -23,11 +27,33 @@ h1 {
   text-align: center;
 }
 
+h2 {
+  font-family: 'Raleway', sans-serif;
+  font-size: 200%;
+  font-weight: 200;
+}
+
 /* Index */
 
 .index-title {
   font-family: 'Marcellus SC', serif;
-  font-size: 400%;
+  font-size: 500%;
   font-weight: 400;
   text-align: center;
+  color: rgb(161,34,139);
+}
+
+.index-sub-title {
+  font-family: 'Raleway', sans-serif;
+  font-size: 150%;
+  font-weight: 200;
+  color: rgb(27,20,100);
+
+}
+
+.nav-link {
+  font-family: 'Raleway', sans-serif;
+  font-size: 100%;
+  font-weight: 200;
+  color: rgb(161,34,139);
 }
