@@ -20,6 +20,21 @@ body {
   padding-bottom: 4 !important;
 }
 
+.page-footer {
+  font-family: 'Raleway', sans-serif;
+  font-size: 80%;
+  font-weight: 200;
+  color: rgb(27,20,100);
+}
+
+footer a {
+  color: rgb(161,34,139);
+}
+
+footer a:hover {
+  color: rgb(161,34,139);
+}
+
 h1 {
   font-family: 'Marcellus SC', serif;
   font-size: 400%;
@@ -68,4 +83,12 @@ p {
   font-size: 100%;
   font-weight: 200;
   color: rgb(161,34,139);
+}
+
+.button-color {
+  color: rgb(161,34,139);
+}
+
+.background-footer {
+  background-color: rgb(27,20,100);
 }
