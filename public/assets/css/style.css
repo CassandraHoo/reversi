@@ -1,0 +1,33 @@
+/* Main Reversi Styles */
+
+body {
+  background-color: white;
+}
+
+.mt-5 {
+  margin-top: 5 !important;
+}
+
+.mb-5 {
+  margin-bottom: 5 !important;
+}
+
+.pt-4 {
+  padding-top: 4 !important;
+}
+
+h1 {
+  font-family: 'Marcellus SC', serif;
+  font-size: 400%;
+  font-weight: 400;
+  text-align: center;
+}
+
+/* Index */
+
+.index-title {
+  font-family: 'Marcellus SC', serif;
+  font-size: 400%;
+  font-weight: 400;
+  text-align: center;
+}
