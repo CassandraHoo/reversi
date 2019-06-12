@@ -305,10 +305,10 @@ socket.on('game_update',function(payload){
 
   /* Update my color */
   if(socket.id == payload.game.player_star.socket){
-    my_color = 'Star';
+    my_color = 'star';
   }
   else if(socket.id == payload.game.player_moon.socket){
-    my_color = 'Moon';
+    my_color = 'moon';
   }
   else{
     /* Something weird is going on, like three people playing at once */
@@ -317,7 +317,7 @@ socket.on('game_update',function(payload){
     return;
   }
 
-  $('#my_color').html('<h3 id="my_color">I am '+my_color+'</h3>');
+  $('#my_color').html('<h3 id="my_color">I am '+my_color.charAt(0).toUpperCase() + my_color.slice(1)+'</h3>');
   $('#my_color').append('<h4>It is '+payload.game.whose_turn+'\'s turn. Elapsed time <span id="elapsed"></span></h4>');
 
   clearInterval(interval_timer);
