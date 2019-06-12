@@ -27,6 +27,27 @@ body {
   color: rgb(27,20,100);
 }
 
+.reversi-title {
+  font-family: 'Marcellus SC', serif;
+  font-size: 500%;
+  font-weight: 400;
+  text-align: center;
+  color: rgb(161,34,139);
+}
+
+.form-btn {
+  margin-left: 10px;
+  background-color: rgb(27,20,100);
+  border-color: rgb(27,20,100);
+  color: white;
+}
+
+.form-btn:hover {
+  background-color: rgb(161,34,139);
+  border-color: rgb(161,34,139);
+  color: white;
+}
+
 footer a {
   color: rgb(161,34,139);
 }
@@ -62,13 +83,6 @@ p {
 
 /* Index */
 
-.index-title {
-  font-family: 'Marcellus SC', serif;
-  font-size: 500%;
-  font-weight: 400;
-  text-align: center;
-  color: rgb(161,34,139);
-}
 
 .index-sub-title {
   font-family: 'Raleway', sans-serif;
