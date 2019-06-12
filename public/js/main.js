@@ -1,4 +1,4 @@
-/* functions for general use */
+moon/* functions for general use */
 
 /* This function returns the value associated with 'whichParam' on URL */
 function getURLParameters(whichParam)
@@ -26,6 +26,8 @@ if('undefined' == typeof chat_room || !chat_room){
 
 /* Connect to the socket server */
 var socket = io.connect();
+
+var gifloader = 0;
 
 /* What to do when the server sends me a log message */
 socket.on('log',function(array){
@@ -302,11 +304,11 @@ socket.on('game_update',function(payload){
   }
 
   /* Update my color */
-  if(socket.id == payload.game.player_white.socket){
-    my_color = 'white';
+  if(socket.id == payload.game.player_star.socket){
+    my_color = 'star';
   }
-  else if(socket.id == payload.game.player_black.socket){
-    my_color = 'black';
+  else if(socket.id == payload.game.player_moon.socket){
+    my_color = 'moon';
   }
   else{
     /* Something weird is going on, like three people playing at once */
@@ -336,52 +338,55 @@ socket.on('game_update',function(payload){
     , 1000);
   /* Animate changes to the board */
 
-  var blacksum = 0;
-  var whitesum = 0;
+  var moonsum = 0;
+  var starsum = 0;
 
   var row,column;
   for(row = 0; row < 8 ; row++){
     for(column = 0; column < 8; column++){
-      if(board[row][column] == 'b'){
-        blacksum++;
+      if(board[row][column] == 'm'){
+        moonsum++;
       }
-      if(board[row][column] == 'w'){
-        whitesum++;
+      if(board[row][column] == 's'){
+        starsum++;
       }
 
       /* If a board space has changed */
       if(old_board[row][column] != board [row][column]){
         if(old_board[row][column] == '?' && board[row][column] == ' '){
-          $('#'+row+'_'+column).html('<img src="assets/images/empty.gif" alt="empty square"/>');
+          $('#'+row+'_'+column).html('<img src="assets/images/empty.gif?'+gifloader+'"alt="empty square"/>');
         }
-        else if(old_board[row][column] == '?' && board[row][column] == 'w'){
-          $('#'+row+'_'+column).html('<img src="assets/images/empty_to_star_2.gif" alt="white square"/>');
+        else if(old_board[row][column] == '?' && board[row][column] == 's'){
+          $('#'+row+'_'+column).html('<img src="assets/images/empty_to_star_2.gif?'+gifloader+'" alt="star square"/>');
         }
-        else if(old_board[row][column] == '?' && board[row][column] == 'b'){
-          $('#'+row+'_'+column).html('<img src="assets/images/empty_to_moon.gif" alt="black square"/>');
+        else if(old_board[row][column] == '?' && board[row][column] == 'm'){
+          $('#'+row+'_'+column).html('<img src="assets/images/empty_to_moon.gif?'+gifloader+'" alt="moon square"/>');
         }
-        else if(old_board[row][column] == ' ' && board[row][column] == 'w'){
-          $('#'+row+'_'+column).html('<img src="assets/images/empty_to_star_2.gif" alt="white square"/>');
+        else if(old_board[row][column] == ' ' && board[row][column] == 's'){
+          $('#'+row+'_'+column).html('<img src="assets/images/empty_to_star_2.gif?'+gifloader+'" alt="star square"/>');
         }
-        else if(old_board[row][column] == ' ' && board[row][column] == 'b'){
-          $('#'+row+'_'+column).html('<img src="assets/images/empty_to_moon.gif" alt="black square"/>');
+        else if(old_board[row][column] == ' ' && board[row][column] == 'm'){
+          $('#'+row+'_'+column).html('<img src="assets/images/empty_to_moon.gif?'+gifloader+'?'+gifloader+'" alt="moon square"/>');
         }
-        else if(old_board[row][column] == 'w' && board[row][column] == ' '){
-          $('#'+row+'_'+column).html('<img src="assets/images/star_to_empty.gif" alt="empty square"/>');
+        else if(old_board[row][column] == 's' && board[row][column] == ' '){
+          $('#'+row+'_'+column).html('<img src="assets/images/star_to_empty.gif?'+gifloader+'" alt="empty square"/>');
         }
-        else if(old_board[row][column] == 'b' && board[row][column] == ' '){
-          $('#'+row+'_'+column).html('<img src="assets/images/moon_to_empty.gif" alt="empty square"/>');
+        else if(old_board[row][column] == 'm' && board[row][column] == ' '){
+          $('#'+row+'_'+column).html('<img src="assets/images/moon_to_empty.gif?'+gifloader+'" alt="empty square"/>');
         }
-        else if(old_board[row][column] == 'w' && board[row][column] == 'b'){
-          $('#'+row+'_'+column).html('<img src="assets/images/star_to_moon.gif" alt="black square"/>');
+        else if(old_board[row][column] == 's' && board[row][column] == 'm'){
+          $('#'+row+'_'+column).html('<img src="assets/images/star_to_moon.gif?'+gifloader+'" alt="moon square"/>');
         }
-        else if(old_board[row][column] == 'b' && board[row][column] == 'w'){
-          $('#'+row+'_'+column).html('<img src="assets/images/moon_to_star.gif" alt="white square"/>');
+        else if(old_board[row][column] == 'm' && board[row][column] == 's'){
+          $('#'+row+'_'+column).html('<img src="assets/images/moon_to_star.gif?'+gifloader+'" alt="star square"/>');
         }
         else{
-          $('#'+row+'_'+column).html('<img src="assets/images/error.gif" alt="error"/>');
+          $('#'+row+'_'+column).html('<img src="assets/images/error.gif?'+gifloader+'" alt="error"/>');
         }
      }
+
+     gifloader++;
+
      /* Set up interactivity */
      $('#'+row+'_'+column).off('click');
      $('#'+row+'_'+column).removeClass('hovered_over');
@@ -403,8 +408,8 @@ socket.on('game_update',function(payload){
       }
     }
   }
-  $('#blacksum').html(blacksum);
-  $('#whitesum').html(whitesum);
+  $('#moonsum').html(moonsum);
+  $('#starsum').html(starsum);
 
   old_board = board;
 

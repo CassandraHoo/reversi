@@ -1,4 +1,4 @@
-/*****************************************/
+'m'/*****************************************/
 /*      Set up the static file Server      /*
 /* Include the static file webserver library */
 var static = require ('node-static');
@@ -525,7 +525,7 @@ io.sockets.on('connection', function (socket) {
           {
             'row': 0-7 the row to play the token on
             'column': 0-7 the column to play the token on
-            'color': 'white or black'
+            'color': 'star or moon'
           }
 
           if successful a success message will be followed by a game_update message
@@ -610,7 +610,7 @@ io.sockets.on('connection', function (socket) {
             }
 
             var color = payload.color;
-            if(('undefined' === typeof color) || !color || (color != 'white' && color !='black')){
+            if(('undefined' === typeof color) || !color || (color != 'star' && color !='moon')){
                 var error_message = 'play_token didn\'t specify a valid color, command aborted';
                 log(error_message);
                 socket.emit('play_token_response',   {
@@ -643,8 +643,8 @@ io.sockets.on('connection', function (socket) {
           }
 
           /* If the wrong socket is playing the color */
-          if( ((game.whose_turn === 'white') && (game.player_white.socket != socket.id)) ||
-            ((game.whose_turn === 'black') && (game.player_black.socket != socket.id))){
+          if( ((game.whose_turn === 'star') && (game.player_star.socket != socket.id)) ||
+            ((game.whose_turn === 'moon') && (game.player_moon.socket != socket.id))){
             var error_message = 'play_token turn played by wrong player ';
             log(error_message);
             socket.emit('play_token_response',   {
@@ -662,17 +662,17 @@ io.sockets.on('connection', function (socket) {
             socket.emit('play_token_response', success_data);
 
             /* Execute the move */
-            if (color == 'white'){
-              game.board[row][column] = 'w';
-              flip_board('w',row,column,game.board);
-              game.whose_turn = 'black';
-              game.legal_moves = calculate_valid_moves('b',game.board);
+            if (color == 'star'){
+              game.board[row][column] = 's';
+              flip_board('s',row,column,game.board);
+              game.whose_turn = 'moon';
+              game.legal_moves = calculate_valid_moves('m',game.board);
             }
-            else if (color == 'black'){
-              game.board[row][column] = 'b';
-              flip_board('b',row,column,game.board);
-              game.whose_turn = 'white';
-              game.legal_moves = calculate_valid_moves('w',game.board);
+            else if (color == 'moon'){
+              game.board[row][column] = 'm';
+              flip_board('m',row,column,game.board);
+              game.whose_turn = 'star';
+              game.legal_moves = calculate_valid_moves('s',game.board);
             }
 
             var d = new Date();
@@ -693,29 +693,29 @@ var games = [];
 
 function create_new_game(){
   var new_game = {};
-  new_game.player_white = {};
-  new_game.player_black = {};
-  new_game.player_white.socket = '';
-  new_game.player_black.socket = '';
-  new_game.player_black.username = '';
+  new_game.player_star = {};
+  new_game.player_moon = {};
+  new_game.player_star.socket = '';
+  new_game.player_moon.socket = '';
+  new_game.player_moon.username = '';
 
   var d = new Date ();
   new_game.last_move_time = d.getTime();
 
-  new_game.whose_turn = 'black';
+  new_game.whose_turn = 'moon';
 
   new_game.board = [
                     [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',],
                     [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',],
                     [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',],
-                    [' ', ' ', ' ', 'w', 'b', ' ', ' ', ' ',],
-                    [' ', ' ', ' ', 'b', 'w', ' ', ' ', ' ',],
+                    [' ', ' ', ' ', 's', 'm', ' ', ' ', ' ',],
+                    [' ', ' ', ' ', 'm', 's', ' ', ' ', ' ',],
                     [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',],
                     [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',],
                     [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',]
                   ];
 
-  new_game.legal_moves = calculate_valid_moves('b',new_game.board);
+  new_game.legal_moves = calculate_valid_moves('m',new_game.board);
   return new_game;
 }
 
@@ -744,11 +744,11 @@ return check_line_match(who,dr,dc,r+dr,c+dc,board);
 
  function valid_move(who,dr,dc,r,c,board){
    var other;
-   if(who === 'b'){
-     other = 'w';
+   if(who === 'm'){
+     other = 's';
    }
-   else if(who === 'w'){
-     other = 'b';
+   else if(who === 's'){
+     other = 'm';
    }
    else{
      log('Houston we have a color problem: '+who);
@@ -864,13 +864,13 @@ function send_game_update(socket, game_id, message){
     numClients = roomObject.length;
     if(numClients > 2){
       console.log('Too many clients in the room: '+game_id+' #: '+numClients);
-      if(games[game_id].player_white.socket == roomObject.sockets[0]){
-        games[game_id].player_white.socket = '';
-        games[game_id].player_white.username = '';
+      if(games[game_id].player_star.socket == roomObject.sockets[0]){
+        games[game_id].player_star.socket = '';
+        games[game_id].player_star.username = '';
       }
-      if(games[game_id].player_black.socket == roomObject.sockets[0]){
-        games[game_id].player_black.socket = '';
-        games[game_id].player_black.username = '';
+      if(games[game_id].player_moon.socket == roomObject.sockets[0]){
+        games[game_id].player_moon.socket = '';
+        games[game_id].player_moon.username = '';
       }
       /* Kick one of the extra peole out */
       var sacrifice = Object.keys(roomObject.sockets)[0];
@@ -881,28 +881,28 @@ while((numClients-1) > 2);
 
   /* Assign this socket a color */
   /* If the current player isn't assigned a color */
-  if ((games[game_id].player_white.socket != socket.id) && (games[game_id].player_black.socket != socket.id)){
+  if ((games[game_id].player_star.socket != socket.id) && (games[game_id].player_moon.socket != socket.id)){
     console.log('Player isn\'t assigned a color: '+socket.id);
     /* and there isn't a color to give them */
-    if((games[game_id].player_black.socket != '') && (games[game_id].player_white.socket != '')){
-      games[game_id].player_white.socket = '';
-      games[game_id].player_white.username = '';
-      games[game_id].player_black.socket = '';
-      games[game_id].player_black.username = '';
+    if((games[game_id].player_moon.socket != '') && (games[game_id].player_star.socket != '')){
+      games[game_id].player_star.socket = '';
+      games[game_id].player_star.username = '';
+      games[game_id].player_moon.socket = '';
+      games[game_id].player_moon.username = '';
     }
   }
   /* Assign colors to the players if not already done */
-  if(games[game_id].player_white.socket == ''){
-    if(games[game_id].player_black.socket != socket.id){
-      games[game_id].player_white.socket = socket.id;
-      games[game_id].player_white.username = players[socket.id].username;
+  if(games[game_id].player_star.socket == ''){
+    if(games[game_id].player_moon.socket != socket.id){
+      games[game_id].player_star.socket = socket.id;
+      games[game_id].player_star.username = players[socket.id].username;
     }
   }
 
-  if(games[game_id].player_black.socket == ''){
-    if(games[game_id].player_white.socket != socket.id){
-      games[game_id].player_black.socket = socket.id;
-      games[game_id].player_black.username = players[socket.id].username;
+  if(games[game_id].player_moon.socket == ''){
+    if(games[game_id].player_star.socket != socket.id){
+      games[game_id].player_moon.socket = socket.id;
+      games[game_id].player_moon.username = players[socket.id].username;
     }
   }
 
@@ -919,18 +919,18 @@ while((numClients-1) > 2);
 
   var row,column;
   var count = 0;
-  var black = 0;
-  var white = 0;
+  var moon = 0;
+  var star = 0;
   for(row = 0; row < 8;row++){
     for(column = 0; column < 8;column++){
       if(games[game_id].legal_moves[row][column] != ' '){
         count++;
       }
-      if(games[game_id].board[row][column] === 'b'){
-        black++;
+      if(games[game_id].board[row][column] === 'm'){
+        moon++;
       }
-      if(games[game_id].board[row][column] === 'w'){
-        white++;
+      if(games[game_id].board[row][column] === 's'){
+        star++;
       }
     }
   }
@@ -938,11 +938,11 @@ while((numClients-1) > 2);
   if(count == 0){
     /* Send a game over message */
     var winner = 'tie game';
-    if (black > white){
-      winner = 'black';
+    if (moon > star){
+      winner = 'moon';
     }
-    if (white > black){
-      winner = 'white';
+    if (star > moon){
+      winner = 'star';
     }
 
     var success_data = {
