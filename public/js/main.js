@@ -226,7 +226,7 @@ socket.on('send_message_response',function(payload){
 
 function makeInviteButton(socket_id) {
 
-  var newHTML = '<button type=\'button\' class=\'btn btn-outline-primary\'>Invite</button>';
+  var newHTML = '<button type=\'button\' class=\'btn form-btn\'>Invite</button>';
   var newNode = $(newHTML);
   newNode.click(function(){
     invite(socket_id);
@@ -235,7 +235,7 @@ function makeInviteButton(socket_id) {
 }
 
 function makeInvitedButton(socket_id) {
-  var newHTML = '<button type=\'button\' class=\'btn btn-primary\'>Invited</button>';
+  var newHTML = '<button type=\'button\' class=\'btn invited-btn\'>Invited</button>';
   var newNode = $(newHTML);
   newNode.click(function(){
     uninvite(socket_id);
@@ -245,7 +245,7 @@ function makeInvitedButton(socket_id) {
 
 function makePlayButton(socket_id) {
 
-  var newHTML = '<button type=\'button\' class=\'btn btn-success\'>Play</button>';
+  var newHTML = '<button type=\'button\' class=\'btn play-btn\'>Play</button>';
   var newNode = $(newHTML);
   newNode.click(function(){
     game_start(socket_id);
@@ -255,7 +255,7 @@ function makePlayButton(socket_id) {
 
 function makeEngagedButton() {
 
-  var newHTML = '<button type=\'button\' class=\'btn btn-danger\'>Engaged</button>';
+  var newHTML = '<button type=\'button\' class=\'btn engaged-btn\'>Engaged</button>';
   var newNode = $(newHTML);
   return(newNode);
 }
@@ -268,7 +268,7 @@ $(function(){
   console.log('*** Client Log Message: \'join_room\' payload: '+JSON.stringify(payload));
   socket.emit('join_room',payload);
 
-  $('#quit').append('<a href="lobby.html?username='+username+'" class="btn btn-danger btn-default active" role="button" aria-pressed="true">Quit</a>');
+  $('#quit').append('<a href="lobby.html?username='+username+'" class="btn form-btn btn-default active" role="button" aria-pressed="true">Quit</a>');
 
 });
 
@@ -435,6 +435,6 @@ socket.on('game_over',function(payload){
 
   /* Jump to a new page */
 
-  $('#game_over').html('<h1>Game Over</h1><h2>'+payload.who_won+' won!</h2>');
-  $('#game_over').append('<a href="lobby.html?username='+username+'" class="btn btn-success btn-lg active" role="button" aria-pressed="true">Return to the Lobby</a>');
+  $('#game_over').html('<h1>Game Over</h1><h2>'+payload.who_won+' won!</h2><h3>Make a Wish!</h3>');
+  $('#game_over').append('<a href="lobby.html?username='+username+'" class="btn form-btn active" role="button" aria-pressed="true">Return to the Lobby</a>');
 });

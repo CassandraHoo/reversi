@@ -1,19 +1,17 @@
-body {
-  background-color: white;
-}
+/* Game Board */
 
 table#game_board{
   margin:auto;
   border-style: solid;
-  border-width: 10px;
-  border-color: rgb(48,50,56);
+  border-width: 5px;
+  border-color: rgb(27,20,100);
 }
 
 table#game_board td{
   padding:5px;
   border-style: solid;
   border-width: 1px;
-  border-color: rgb(48,50,56);
+  border-color: rgb(27,20,100);
 }
 
 #messages p{
@@ -23,4 +21,142 @@ table#game_board td{
 td.hovered_over:hover {
   background:url('../images/hover_square.gif'), rgb(0,105,164);
   background-size: 100% 100%;
+}
+
+/* Main Reversi Styles */
+
+body {
+  background-color: white;
+}
+
+.reversi-title {
+  font-family: 'Marcellus SC', serif;
+  font-size: 500%;
+  font-weight: 400;
+  text-align: center;
+  color: rgb(161,34,139);
+}
+
+/* Buttons */
+
+.form-btn {
+  margin-left: 10px;
+  background-color: rgb(27,20,100);
+  border-color: rgb(27,20,100);
+  color: white;
+}
+
+.form-btn:hover {
+  background-color: rgb(161,34,139);
+  border-color: rgb(161,34,139);
+  color: white;
+}
+
+.button-color {
+  color: rgb(161,34,139);
+}
+
+.play-btn {
+  margin-left: 10px;
+  background-color: rgb(27,20,100);
+  border-color: rgb(27,20,100);
+  color: white;
+}
+
+.play-btn:hover {
+  background-color: rgb(161,34,139);
+  border-color: rgb(161,34,139);
+  color: white;
+}
+
+.invited-btn {
+  margin-left: 10px;
+  background-color: rgb(161,34,139);
+  border-color: rgb(161,34,139);
+  color: white;
+}
+
+.engaged-btn {
+  margin-left: 10px;
+  background-color: rgb(161,34,139);
+  border-color: rgb(161,34,139);
+  color: white;
+}
+
+/* Links */
+
+.nav-link {
+  font-family: 'Raleway', sans-serif;
+  font-size: 100%;
+  font-weight: 200;
+  color: rgb(161,34,139);
+}
+
+/* Footer */
+
+.page-footer {
+  font-family: 'Raleway', sans-serif;
+  font-size: 80%;
+  font-weight: 200;
+  color: rgb(27,20,100);
+}
+
+.background-footer {
+  background-color: rgb(27,20,100);
+}
+
+footer a {
+  color: rgb(161,34,139);
+}
+
+footer a:hover {
+  color: rgb(161,34,139);
+}
+
+/* Font */
+
+h1 {
+  font-family: 'Marcellus SC', serif;
+  font-size: 400%;
+  font-weight: 400;
+  text-align: center;
+}
+
+h2 {
+  font-family: 'Raleway', sans-serif;
+  font-size: 200%;
+  font-weight: 200;
+  color: rgb(27,20,100);
+}
+
+h3 {
+  font-family: 'Raleway', sans-serif;
+  font-size: 150%;
+  font-weight: 200;
+  color: rgb(27,20,100);
+}
+
+p {
+  font-family: 'Raleway', sans-serif;
+  font-size: 100%;
+  font-weight: 200;
+  color: rgb(27,20,100);
+}
+
+/* Padding */
+
+.mt-5 {
+  margin-top: 5 !important;
+}
+
+.mb-5 {
+  margin-bottom: 5 !important;
+}
+
+.pt-4 {
+  padding-top: 4 !important;
+}
+
+.pb-4 {
+  padding-bottom: 4 !important;
 }
