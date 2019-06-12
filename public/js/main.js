@@ -1,4 +1,4 @@
-moon/* functions for general use */
+/* functions for general use */
 
 /* This function returns the value associated with 'whichParam' on URL */
 function getURLParameters(whichParam)
@@ -305,10 +305,10 @@ socket.on('game_update',function(payload){
 
   /* Update my color */
   if(socket.id == payload.game.player_star.socket){
-    my_color = 'star';
+    my_color = 'Star';
   }
   else if(socket.id == payload.game.player_moon.socket){
-    my_color = 'moon';
+    my_color = 'Moon';
   }
   else{
     /* Something weird is going on, like three people playing at once */
@@ -392,7 +392,7 @@ socket.on('game_update',function(payload){
      $('#'+row+'_'+column).removeClass('hovered_over');
 
      if(payload.game.whose_turn === my_color){
-       if(payload.game.legal_moves[row][column] === my_color.substr(0,1)){
+       if(payload.game.legal_moves[row][column] === my_color.toLowerCase().substr(0,1)){
           $('#'+row+'_'+column).addClass('hovered_over');
           $('#'+row+'_'+column).click(function(r,c){
             return function(){
