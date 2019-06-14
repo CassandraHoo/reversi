@@ -435,6 +435,6 @@ socket.on('game_over',function(payload){
 
   /* Jump to a new page */
 
-  $('#game_over').html('<h1>Game Over</h1><h2>'+payload.who_won+' won!</h2><h3>Make a Wish!</h3>');
-  $('#game_over').append('<a href="lobby.html?username='+username+'" class="btn form-btn active" role="button" aria-pressed="true">Return to the Lobby</a>');
+  $('#game_over').html('<h1 class="game_over_white">Game Over</h1><h2 class ="game_over_white">'+payload.who_won+' won!</h2><h3 class="game_over_white">Make a Wish!</h3>').addClass('game_over_screen');
+  $('#game_over').append('<a href="lobby.html?username='+username+'" class="btn game_over-btn active" role="button" aria-pressed="true">Return to the Lobby</a>');
 });
