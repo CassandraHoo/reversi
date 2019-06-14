@@ -31,7 +31,7 @@ td.hovered_over:hover {
   bottom: 0;
   left: 0;
   right: 0;
-  background: rgb(27,20,100);
+  background: rgb(27,20,100,0.9);
   height: 180%;
   width: 100%;
   z-index: 10;
