@@ -58,6 +58,18 @@ body {
   color: white;
 }
 
+.index-btn {
+  background-color: rgb(161,34,139);
+  border-color: rgb(161,34,139);
+  color: white;
+}
+
+.index-btn:hover {
+  background-color: white;
+  border-color: white;
+  color: rgb(161,34,139);
+}
+
 /* Links */
 
 .nav-link {
